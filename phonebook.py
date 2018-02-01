@@ -1,9 +1,8 @@
-@staticmethod
 def contact_exists(message, func=lambda x: x):
     def decorator(f):
         def wrapper(self, name, *args):
             if func(self.is_exist(name)):
-                return f(name, *args)
+                return f(self, name, *args)
             else:
                 raise KeyError(message)
 
