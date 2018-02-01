@@ -1,65 +1,68 @@
-phonebook = {}
-
-
-def is_exist(name):
-    return name in phonebook
-
-
-def contact_exists(message, func=is_exist):
+@staticmethod
+def contact_exists(message, func=lambda x: x):
     def decorator(f):
-        def wrapper(name, *args):
-            if func(name):
+        def wrapper(self, name, *args):
+            if func(self.is_exist(name)):
                 return f(name, *args)
             else:
                 raise KeyError(message)
+
         return wrapper
+
     return decorator
 
 
-@contact_exists('Contact already exists', lambda n: not is_exist(n))
-def create(name, phone):
-    phonebook[name] = phone
+class PhoneBook(object):
+    def __init__(self):
+        self.phonebook = {}
+
+    def is_exist(self, name):
+        return name in self.phonebook
+
+    @contact_exists('Contact already exists', lambda x: not x)
+    def create(self, name, phone):
+        self.phonebook[name] = phone
+
+    @contact_exists("Contact doesn't exist")
+    def read(self, name):
+        return self.phonebook[name]
+
+    @contact_exists("Contact doesn't exist")
+    def update(self, name, phone):
+        self.phonebook[name] = phone
 
 
-@contact_exists("Contact doesn't exist")
-def read(name):
-    return phonebook[name]
+    @contact_exists("Contact doesn't exist")
+    def delete(self, name):
+        del self.phonebook[name]
 
-
-@contact_exists("Contact doesn't exist")
-def update(name, phone):
-    phonebook[name] = phone
-
-
-@contact_exists("Contact doesn't exist")
-def delete(name):
-    del phonebook[name]
-
+phonebook = PhoneBook()
 
 def create_contact():
     name = raw_input('Name?')
     phone = raw_input('Phone?')
-    create(name, phone)
+    phonebook.create(name, phone)
 
 
 def read_contact():
     name = raw_input('Name?')
-    print read(name)
+    print phonebook.read(name)
 
 
 def update_contact():
     name = raw_input('Name?')
     phone = raw_input('Phone?')
-    update(name, phone)
+    phonebook.update(name, phone)
 
 
 def delete_contact():
     name = raw_input('Name?')
-    delete(name)
+    phonebook.delete(name)
 
 
 def dummy():
     print "Incorrect action"
+
 
 
 ACTIONS = {
