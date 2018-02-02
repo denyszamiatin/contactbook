@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PhoneBook</title>
+</head>
+<body>
+<h1>Phone Book</h1>
+{% block content %}
+<p><a href="/add">Add</a></p>
+<ul>
+    {% for contact in contacts %}
+    <li><b>{{contact.0}}</b>: {{contact.1}}</li>
+    {% endfor %}
+</ul>
+{% endblock %}
+</body>
+</html>

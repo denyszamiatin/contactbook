@@ -30,6 +30,9 @@ class PhoneBook(object):
     def is_exist(self, name):
         return name in self.phonebook
 
+    def list_all(self):
+        return self.phonebook.items()
+
     @autosave
     @contact_exists('Contact already exists', lambda x: not x)
     def create(self, name, phone):
