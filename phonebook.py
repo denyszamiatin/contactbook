@@ -1,7 +1,6 @@
 from xml.etree import ElementTree as ET
 import re
 
-import model
 import serializer
 
 
@@ -11,9 +10,14 @@ phone_pattern = re.compile(r'\d{3}-\d{2}-\d{2}')
 config = ET.parse('settings.xml')
 serializer_name = config.find('.//serializer').text.strip()
 if serializer_name == 'JSON':
+    import model
     phonebook = model.PhoneBook(serializer.JsonSerializer())
 elif serializer_name == 'CSV':
+    import model
     phonebook = model.PhoneBook(serializer.CsvSerializer())
+elif serializer_name == 'DB':
+    import db_model
+    phonebook = db_model.PhoneBook()
 else:
     raise NameError("Incorrect settings")
 
