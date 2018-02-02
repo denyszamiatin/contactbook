@@ -1,7 +1,12 @@
 from xml.etree import ElementTree as ET
+import re
 
 import model
 import serializer
+
+
+phone_pattern = re.compile(r'\d{3}-\d{2}-\d{2}')
+
 
 config = ET.parse('settings.xml')
 serializer_name = config.find('.//serializer').text.strip()
@@ -13,9 +18,16 @@ else:
     raise NameError("Incorrect settings")
 
 
+def input_phone():
+    while True:
+        phone = raw_input('Phone?')
+        if phone_pattern.match(phone):
+            return phone
+
+
 def create_contact():
     name = raw_input('Name?')
-    phone = raw_input('Phone?')
+    phone = input_phone()
     phonebook.create(name, phone)
 
 
@@ -26,7 +38,7 @@ def read_contact():
 
 def update_contact():
     name = raw_input('Name?')
-    phone = raw_input('Phone?')
+    phone = input_phone()
     phonebook.update(name, phone)
 
 
