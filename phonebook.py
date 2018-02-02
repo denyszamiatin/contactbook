@@ -1,7 +1,16 @@
+from xml.etree import ElementTree as ET
+
 import model
 import serializer
 
-phonebook = model.PhoneBook(serializer.CsvSerializer())
+config = ET.parse('settings.xml')
+serializer_name = config.find('.//serializer').text.strip()
+if serializer_name == 'JSON':
+    phonebook = model.PhoneBook(serializer.JsonSerializer())
+elif serializer_name == 'CSV':
+    phonebook = model.PhoneBook(serializer.CsvSerializer())
+else:
+    raise NameError("Incorrect settings")
 
 
 def create_contact():
