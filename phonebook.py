@@ -1,41 +1,8 @@
-def contact_exists(message, func=lambda x: x):
-    def decorator(f):
-        def wrapper(self, name, *args):
-            if func(self.is_exist(name)):
-                return f(self, name, *args)
-            else:
-                raise KeyError(message)
+import model
+import serializer
 
-        return wrapper
+phonebook = model.PhoneBook(serializer.CsvSerializer())
 
-    return decorator
-
-
-class PhoneBook(object):
-    def __init__(self):
-        self.phonebook = {}
-
-    def is_exist(self, name):
-        return name in self.phonebook
-
-    @contact_exists('Contact already exists', lambda x: not x)
-    def create(self, name, phone):
-        self.phonebook[name] = phone
-
-    @contact_exists("Contact doesn't exist")
-    def read(self, name):
-        return self.phonebook[name]
-
-    @contact_exists("Contact doesn't exist")
-    def update(self, name, phone):
-        self.phonebook[name] = phone
-
-
-    @contact_exists("Contact doesn't exist")
-    def delete(self, name):
-        del self.phonebook[name]
-
-phonebook = PhoneBook()
 
 def create_contact():
     name = raw_input('Name?')
@@ -61,7 +28,6 @@ def delete_contact():
 
 def dummy():
     print "Incorrect action"
-
 
 
 ACTIONS = {
